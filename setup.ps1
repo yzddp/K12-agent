@@ -45,9 +45,32 @@ if (-not (Test-Path $ConfigFile)) {
     exit 1
 }
 
-# ---- 步骤 2: 收集飞书配置 ----
+# ---- 步骤 2: 创建用户配置 ----
 Write-Host ""
-Write-Host "[2/6] 配置飞书 bot..." -ForegroundColor Yellow
+Write-Host "[2/7] 创建本地用户配置..." -ForegroundColor Yellow
+$userFile = "$ScriptDir\USER.md"
+$userTemplate = "$ScriptDir\USER.template.md"
+if (-not (Test-Path $userFile) -and (Test-Path $userTemplate)) {
+    Copy-Item -Path $userTemplate -Destination $userFile
+    Write-Host "  [OK] 已从 USER.template.md 创建 USER.md（可安全编辑，不会被 git pull 覆盖）" -ForegroundColor Green
+} elseif (Test-Path $userFile) {
+    Write-Host "  [OK] USER.md 已存在，保留现有配置" -ForegroundColor Green
+} else {
+    Write-Host "  [WARN] 未找到 USER.template.md，请手动创建 USER.md" -ForegroundColor Yellow
+}
+
+# 检查 MEMORY.md
+$memoryFile = "$ScriptDir\MEMORY.md"
+if (-not (Test-Path $memoryFile)) {
+    "# MEMORY.md — 修远记忆（自动生成）`n`n当前状态：尚无数据" | Out-File -FilePath $memoryFile -Encoding UTF8
+    Write-Host "  [OK] 已创建 MEMORY.md 初始模板" -ForegroundColor Green
+} else {
+    Write-Host "  [OK] MEMORY.md 已存在" -ForegroundColor Green
+}
+
+# ---- 步骤 3: 收集飞书配置 ----
+Write-Host ""
+Write-Host "[3/7] 配置飞书 bot..." -ForegroundColor Yellow
 
 $hasFeishu = Read-Host "是否已有飞书 bot 的 App ID 和 App Secret？(y/n, 默认 y)"
 if ($hasFeishu -ne "n") {
@@ -66,9 +89,9 @@ if ($hasFeishu -ne "n") {
     $feishuAppSecret = ""
 }
 
-# ---- 步骤 3: 注册 agent 和 binding ----
+# ---- 步骤 4: 注册 agent 和 binding ----
 Write-Host ""
-Write-Host "[3/6] 注册 agent 到 openclaw.json..." -ForegroundColor Yellow
+Write-Host "[4/7] 注册 agent 到 openclaw.json..." -ForegroundColor Yellow
 
 # 生成绝对 workspace 路径
 $wsPath = $ScriptDir
@@ -156,9 +179,9 @@ try {
     Remove-Item -Force $tmpPy -ErrorAction SilentlyContinue
 }
 
-# ---- 步骤 4: 初始化数据库 ----
+# ---- 步骤 5: 初始化数据库 ----
 Write-Host ""
-Write-Host "[4/6] 初始化数据库..." -ForegroundColor Yellow
+Write-Host "[5/7] 初始化数据库..." -ForegroundColor Yellow
 try {
     py "$ScriptDir\scripts\init_db.py"
     Write-Host "  [OK] 数据库初始化完成" -ForegroundColor Green
@@ -167,9 +190,9 @@ try {
     exit 1
 }
 
-# ---- 步骤 5: Cron 配置引导 ----
+# ---- 步骤 6: Cron 配置引导 ----
 Write-Host ""
-Write-Host "[5/6] 定时任务配置..." -ForegroundColor Yellow
+Write-Host "[6/7] 定时任务配置..." -ForegroundColor Yellow
 $setupCron = Read-Host "是否要配置周报等定时任务？(y/n, 默认 n)"
 if ($setupCron -eq "y") {
     Write-Host ""
@@ -185,9 +208,9 @@ if ($setupCron -eq "y") {
     Write-Host "  [SKIP] 可后续按 CRON.md 手动配置" -ForegroundColor Yellow
 }
 
-# ---- 步骤 6: 启动与验证 ----
+# ---- 步骤 7: 启动与验证 ----
 Write-Host ""
-Write-Host "[6/6] 启动与验证..." -ForegroundColor Yellow
+Write-Host "[7/7] 启动与验证..." -ForegroundColor Yellow
 $restartNow = Read-Host "是否立即重启 Gateway？(y/n, 默认 y)"
 if ($restartNow -ne "n") {
     try {

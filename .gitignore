@@ -1,5 +1,13 @@
+# 用户配置（setup.ps1 从 USER.template.md 生成，git pull 不覆盖）
+USER.md
+
+# 运行时自动生成
+MEMORY.md
+memory/
+
+# workspace 元数据（openclaw 自动生成）
+.openclaw/
+
+# npm
 node_modules/
-.env
-*.log
-memory/*.md
-!memory/.gitkeep
+package-lock.json
