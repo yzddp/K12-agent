@@ -1,0 +1,35 @@
+{
+  "name": "@openclaw/workspace-xiuyuan",
+  "version": "2.0.0",
+  "description": "修远 — K12 AI 学习辅导员 OpenClaw workspace",
+  "scripts": {
+    "setup": "powershell -ExecutionPolicy Bypass -File setup.ps1",
+    "upgrade": "powershell -ExecutionPolicy Bypass -File upgrade.ps1",
+    "postinstall": "powershell -ExecutionPolicy Bypass -File setup.ps1"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "AGENTS.md",
+    "BOOT.md",
+    "CRON.md",
+    "HEARTBEAT.md",
+    "IDENTITY.md",
+    "MEMORY.md",
+    "SOUL.md",
+    "TOOLS.md",
+    "USER.md",
+    "README.md",
+    "setup.ps1",
+    "upgrade.ps1",
+    "scripts/"
+  ],
+  "keywords": [
+    "openclaw",
+    "k12",
+    "education",
+    "ai-tutor"
+  ],
+  "license": "MIT"
+}
